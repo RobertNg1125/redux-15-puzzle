@@ -2,18 +2,22 @@ import React from "react";
 import { connect } from "react-redux";
 
 import Board from "../components/Board";
+import Congrats from "../components/Congrats";
+
 import {
 	moveLeft,
 	moveRight,
 	moveBottom,
 	moveTop,
-	moveNumber
+	moveNumber,
+	shuffle
 } from "../actions";
 
 class App extends React.Component {
 
 	componentDidMount() {
 		window.addEventListener('keydown', this.handleKeyDown.bind(this));
+		this.props.shuffle();
 	}
 
 	componentWillUnmount() {
@@ -38,18 +42,24 @@ class App extends React.Component {
 	}
 
 	render() {
+		const isWin = this.props.isWin ? <h1>You are win</h1> : <span></span>;
 		return (
 			<div>
+				<Congrats isWin={this.props.isWin} />
 				<Board board={this.props.gameBoard}
 					boardWidth={this.props.width}
 					moveCell={this.props.moveCell} />
+				<br/>
+				<input type="button" value="shuffle" onClick={this.props.shuffle} />
 			</div>
+
 		);
 	}
 }
 
 const mapStateToProps = (state) => {
 	return {
+		isWin : state.board.isWin,
 		width : state.board.width,
 		gameBoard : state.board.gameBoard
 	};
@@ -61,7 +71,8 @@ const mapDispatchToProps = (dispatch) => {
 		moveLeft: () => dispatch(moveLeft()),
 		moveRight: () => dispatch(moveRight()),
 		moveBottom: () => dispatch(moveBottom()),
-		moveTop: () => dispatch(moveTop())
+		moveTop: () => dispatch(moveTop()),
+		shuffle: () => dispatch(shuffle())
 	}
 }
 

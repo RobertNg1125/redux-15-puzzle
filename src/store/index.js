@@ -6,11 +6,12 @@ import rootReducer from "../reducers";
 const configureStore = (width) => {
 	const maxNumber = width * width;
 	const gameBoard = [ ...Array(maxNumber).fill().map( (e, i) => i + 1) ];
+	const isWin = false;
 
 	return createStore(
 		rootReducer,
 		{
-			board : { width, gameBoard }
+			board : { isWin, width, gameBoard }
 		},
 		applyMiddleware(thunk)
 	);

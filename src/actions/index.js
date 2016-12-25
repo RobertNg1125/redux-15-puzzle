@@ -25,3 +25,20 @@ export const moveNumber = (number) => ({
 	type: MOVE_NUMBER,
 	number
 });
+
+export const shuffle = (count = 1000) => {
+
+	const directions = [moveRight(), moveBottom(), moveLeft(), moveTop()];
+
+	return (dispatch) => {
+		let i = 0;
+		let direction;
+
+		while (i < count)
+		{
+			i++;
+			let direction = Math.floor(Math.random() * directions.length);
+			dispatch(directions[direction]);
+		}
+	};
+};

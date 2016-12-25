@@ -47,6 +47,7 @@ const getNextPosition = (direction, width, position) => {
 }
 
 const board = (state = {
+	isWin: false,
 	width: 4,
 	gameBoard: []
 }, action) => {
@@ -55,6 +56,8 @@ const board = (state = {
 	let tmp = [ ...gameBoard ]
 	const maxNumber = width * width;
 	const [maxRow, maxCol] = getPositionByNumber(gameBoard, width, maxNumber);
+
+	const defaultBoard = [ ...Array(maxNumber).fill().map( (e, i) => i + 1) ];
 	
 	switch (action.type) {
 		case MOVE_LEFT:
@@ -64,6 +67,7 @@ const board = (state = {
 		case MOVE_NUMBER:
 			let number = -1;
 			let [row, col] = [-1, -1];
+			let isWin = false;
 
 			if (action.type == MOVE_NUMBER) {
 				number = action.number;
@@ -85,9 +89,12 @@ const board = (state = {
 				const maxIndex = gameBoard.indexOf(maxNumber);
 				tmp[index] = maxNumber;
 				tmp[maxIndex] = number;
+
+				isWin = JSON.stringify(defaultBoard) === JSON.stringify(tmp);
 			}
 
 			return {
+				isWin,
 				width,
 				gameBoard: tmp
 			};
