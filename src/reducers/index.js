@@ -20,31 +20,31 @@ const getPositionByNumber = (board, width, number) => {
 	return [row, col];
 };
 
-// const getNextPosition = (direction, width, position) => {
-// 	const [col, row] = position;
-// 
-// 	if (direction == MOVE_RIGHT && col == 0
-// 		|| direction == MOVE_LEFT && col == width -1
-// 		|| direction == MOVE_BOTTOM && row == 0
-// 		|| direction == MOVE_TOP && row = witdh - 1) {
-// 		return position;
-// 	}
-// 
-// 	if (direction == MOVE_RIGHT) {
-// 		return [col -1, row];
-// 	}
-// 	if (direction == MOVE_LEFT) {
-// 		return [col + 1, row];
-// 	}
-// 	if (direction == MOVE_BOTTOM) {
-// 		return [col, row - 1];
-// 	}
-// 	if (direction == MOVE_TOP) {
-// 		return [col, row + 1];
-// 	}
-// 
-// 	return position;
-// }
+const getNextPosition = (direction, width, position) => {
+	const [row, col] = position;
+
+	if (direction == MOVE_RIGHT && col == 0
+		|| direction == MOVE_LEFT && col == width -1
+		|| direction == MOVE_BOTTOM && row == 0
+		|| direction == MOVE_TOP && row == width - 1) {
+		return position;
+	}
+
+	if (direction == MOVE_RIGHT) {
+		return [row, col -1];
+	}
+	if (direction == MOVE_LEFT) {
+		return [row, col + 1];
+	}
+	if (direction == MOVE_BOTTOM) {
+		return [row - 1, col];
+	}
+	if (direction == MOVE_TOP) {
+		return [row + 1, col];
+	}
+
+	return position;
+}
 
 const board = (state = {
 	width: 4,
@@ -55,22 +55,34 @@ const board = (state = {
 	let tmp = [ ...gameBoard ]
 	const maxNumber = width * width;
 	const [maxRow, maxCol] = getPositionByNumber(gameBoard, width, maxNumber);
-	// const nextPosition = getNextPosition(direction, state.width, maxNumber);
-	// const nextNumber =
 	
 	switch (action.type) {
+		case MOVE_LEFT:
+		case MOVE_RIGHT:
+		case MOVE_BOTTOM:
+		case MOVE_TOP:
 		case MOVE_NUMBER:
-			const { number } = action;
-			const [row, col] = getPositionByNumber(gameBoard, width, number);
+			let number = -1;
+			let [row, col] = [-1, -1];
 
-			if (row == maxRow        && col == maxCol - 1
+			if (action.type == MOVE_NUMBER) {
+				number = action.number;
+				[row, col] = getPositionByNumber(gameBoard, width, number);
+			}
+			else {
+				[row, col] = getNextPosition(action.type, width, [maxRow, maxCol]);
+				const nextIndex = col + row * width;
+				number = (nextIndex >= 0 && nextIndex < width * width) ? tmp[nextIndex] : -1;
+			}
+
+			if (number > 0 && (
+				   row == maxRow     && col == maxCol - 1
 				|| row == maxRow     && col == maxCol + 1
 				|| row == maxRow - 1 && col == maxCol
-				|| row == maxRow + 1 && col == maxCol)
+				|| row == maxRow + 1 && col == maxCol) )
 			{
 				const index = gameBoard.indexOf(number);
 				const maxIndex = gameBoard.indexOf(maxNumber);
-				console.log(index, maxIndex);
 				tmp[index] = maxNumber;
 				tmp[maxIndex] = number;
 			}

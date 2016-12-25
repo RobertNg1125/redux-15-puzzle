@@ -5,20 +5,20 @@ export const MOVE_LEFT = "MOVE_LEFT";
 export const MOVE_TOP = "MOVE_TOP";
 export const MOVE_NUMBER = "MOVE_NUMBER";
 
-const moveRight = () => ({
+export const moveRight = () => ({
 	type: MOVE_RIGHT
 });
 
-const moveBottom = () => ({
+export const moveBottom = () => ({
 	type: MOVE_BOTTOM
 });
 
-const moveLeft = () => ({
+export const moveLeft = () => ({
 	type: MOVE_LEFT
 });
 
-const moveTop = () => ({
-	type: MOVE_BOTTOM
+export const moveTop = () => ({
+	type: MOVE_TOP
 });
 
 export const moveNumber = (number) => ({

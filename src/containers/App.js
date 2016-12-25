@@ -2,9 +2,41 @@ import React from "react";
 import { connect } from "react-redux";
 
 import Board from "../components/Board";
-import { moveNumber } from "../actions";
+import {
+	moveLeft,
+	moveRight,
+	moveBottom,
+	moveTop,
+	moveNumber
+} from "../actions";
 
 class App extends React.Component {
+
+	componentDidMount() {
+		window.addEventListener('keydown', this.handleKeyDown.bind(this));
+	}
+
+	componentWillUnmount() {
+		window.removeEventListener('keydown', this.handleKeyDown.bind(this));
+	}
+
+	handleKeyDown(e) {
+		switch (e.keyCode) {
+			case 37:
+				this.props.moveLeft();
+				break;
+			case 39:
+				this.props.moveRight();
+				break;
+			case 40:
+				this.props.moveBottom();
+				break;
+			case 38:
+				this.props.moveTop();
+				break;
+		}
+	}
+
 	render() {
 		return (
 			<div>
@@ -25,9 +57,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		moveCell: (number) => {
-			dispatch(moveNumber(number));
-		}
+		moveCell: (number) => { dispatch(moveNumber(number)); },
+		moveLeft: () => dispatch(moveLeft()),
+		moveRight: () => dispatch(moveRight()),
+		moveBottom: () => dispatch(moveBottom()),
+		moveTop: () => dispatch(moveTop())
 	}
 }
 
